@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import LineChart from '../components/LineChart.js';
+import { LineChart, Line } from 'recharts';
 import { bindActionCreators } from 'redux';
 import getStockData from '../actions/stocks.js';
 import OverlayLoader from 'react-loading-indicator-overlay/lib/OverlayLoader';
@@ -8,6 +8,7 @@ import OverlayLoader from 'react-loading-indicator-overlay/lib/OverlayLoader';
 class Dashboard extends Component{
     render(){
         var portfolio_data = this.props.portfolio.data
+        this.ref
         if(this.props.portfolio.isFirstLoad || this.props.portfolio.isFetching){
             return (
                 <div className="col-md-8 portfolio">
@@ -24,15 +25,12 @@ class Dashboard extends Component{
         else {
             return(
                 <div className="col-md-8 portfolio">
-                    <h3 id="portfolio-value">₹ {portfolio_data[0].price}</h3>
+                    <h3 id="portfolio-value" >₹ {portfolio_data[0].price.toLocaleString('hi-IN')}</h3>
                     <p><b id="portfolio-change"></b>  <b id="portfolio-rate-change"></b>  <span id="portfolio-period">TODAY</span></p>
                     <div id="chart-portfolio">
-                        <LineChart 
-                            width={700}
-                            height={350}
-                            data={portfolio_data}
-                            color={"red"}
-                        />
+                        <LineChart width={700} height={350} data={portfolio_data} margin={{top: 5, right: 30, left: 20, bottom: 5}} >
+                            <Line type="monotone" dataKey="price" stroke="#000" dot={false} />
+                        </LineChart>
                     </div>
                 </div>
             );
@@ -40,7 +38,7 @@ class Dashboard extends Component{
     }
 
     componentWillMount() {
-        if(this.props.user.isLoggedIn){
+        if(this.props.user.isLoggedIn){ 
             this.props.getStockData(this.props.user.user);
         }
     }

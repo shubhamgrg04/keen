@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import LineChart from '../components/LineChart.js';
+import { LineChart, Line } from 'recharts';
 import {connect} from 'react-redux';
 
 class StockRow extends Component{
@@ -19,12 +19,14 @@ class StockRow extends Component{
                     <p className="ticker-quantity"> {stockdata.ticker_quantity} Shares</p>
                 </div>
                 <div className="col-md-6">
-                    <LineChart 
-                            width={300}
-                            height={150}
-                            data={stockdata.prices}
-                            color={((change>0)?'#21ce99':'#ff4d2d')}
-                        />
+                        <LineChart 
+                            width={250}
+                            height={100}
+                            data={stockdata.prices}>
+
+                            <Line type="linear" dataKey="price" stroke={((change>0)?'#21ce99':'#ff4d2d')} dot={false} />
+
+                        </LineChart>
                 </div>
                 <div className="col-md-1" />
             </div>
